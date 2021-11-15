@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import { Link, useHistory } from "react-router-dom";
 import authHeader from "../utils/authHeader";
 import axios from "axios";
-// import BASE_URL from '../utils/baseUrl'
+import BASE_URL from '../utils/baseUrl'
 
 const AddNewProduct = ({ showFormView }) => {
     const productOption = [
@@ -42,14 +42,12 @@ const AddNewProduct = ({ showFormView }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        console.log(loginData);
 
         axios.post(`${BASE_URL}/products`, loginData, { headers: authHeader() })
             .then(function (response) {
-                if (response.data.token) {
-                    sessionStorage.setItem('token', response.data.token)
-                }
                 toast.success("Successfully Added new Product")
-                setTimeout(() => { history.push('/users') }, 3000)
+                setTimeout(() => { showFormView("false") }, 3000)
 
             }).catch((err) => {
                 toast.error(err?.response?.data?.message)
@@ -106,7 +104,7 @@ const AddNewProduct = ({ showFormView }) => {
                         </div>
                     </div>
                     <div className="mt-8 text-center">
-                        <button className="app-background text-gray-800 font-bold  py-2 px-10 rounded inline-flex items-center" onClick={() => showFormView("false")}>
+                        <button className="app-background text-gray-800 font-bold  py-2 px-10 rounded inline-flex items-center">
                             <span className="text-white">Add New Product</span>
                         </button>
                     </div>

@@ -6,36 +6,47 @@ import Select from 'react-select';
 import { toast } from "react-toastify";
 import { Link, useHistory } from "react-router-dom";
 import axios from "axios";
+import { getInProducts } from '../Services/products'
 // import BASE_URL from '../utils/baseUrl'
 
-const AddSoldProduct = ({showFormView}) => {
-    const productOption = [
-        { label: "ORANGES", value: "ORANGES" },
-        { label: "ORANGES", value: "ORANGES" },
-        { label: "ORANGES", value: "ORANGES" },
+const AddSoldProduct = ({ showFormView }) => {
+    // const productOption = [
+    //     { label: "ORANGES", value: "ORANGES" },
+    //     { label: "ORANGES", value: "ORANGES" },
+    //     { label: "ORANGES", value: "ORANGES" },
 
-    ]
+    // ]
 
-
+    const [productOption, setProductOption] = React.useState([])
     // const dispatch = useDispatch();
     // const history = useHistory();
-    // const initialUser = {
-    //     email: "",
-    //     password: "",
-    // };
+    const initialUser = {
+        product: "",
+        price: "",
+        quantity: ""
+    };
+    const loadData = async () => {
+        console.log(await getInProducts())
+        return await getInProducts()
 
+    }
+    React.useEffect(async () => {
 
-    // const [loginData, setLoginData] = useState(initialUser);
+        setProductOption(await loadData());
+    }, [])
+    console.log("products ", productOption)
+
+    const [loginData, setLoginData] = useState(initialUser);
     const inputHandler = (e) => {
         var name = e.target.name;
         var value = e.target.value;
-        // setLoginData({ ...loginData, [name]: value });
+        setLoginData({ ...loginData, [name]: value });
     };
 
     const selectHandler = (payload) => {
-        var name = payload.target.name;
-        var value = payload.target.value;
-        // setLoginData({ ...loginData, [name]: value });
+        var name = payload.name;
+        var value = payload.value;
+        setLoginData({ ...loginData, [name]: value });
     };
 
     const handleSubmit = (e) => {
@@ -48,15 +59,14 @@ const AddSoldProduct = ({showFormView}) => {
         //     .catch((err) => {
 
         //     });
-        // axios.post(`${BASE_URL}/user/login`, loginData)
-        //     .then(function (response) {
-        //         if (response.data.token) {
-        //             sessionStorage.setItem('token', response.data.token)
-        //         }
-        //         toast.success("Successfully logged in")
-        //         setTimeout(() => { history.push('/users') }, 3000)
+        axios.post(`${BASE_URL}/products`, loginData, { headers: authHeader() })
+            .then(function (response) {
+                toast.success("Successfully Sold Product")
+                setTimeout(() => { showFormView("false") }, 3000)
 
-        //     })
+            }).catch((error) => {
+                toast.error(error.response?.data?.message)
+            })
 
 
     };
@@ -114,7 +124,7 @@ const AddSoldProduct = ({showFormView}) => {
                         </div>
                     </div>
                     <div className="mt-8 text-center">
-                        <button className="app-background text-gray-800 font-bold  py-2 px-10 rounded inline-flex items-center" onClick={()=>showFormView("false")}>
+                        <button className="app-background text-gray-800 font-bold  py-2 px-10 rounded inline-flex items-center" >
                             <span className="text-white">Add Sold Product</span>
                         </button>
                     </div>
