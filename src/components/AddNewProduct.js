@@ -3,19 +3,15 @@ import "../styles/register.css";
 import { useDispatch, useSelector } from "react-redux";
 import Input from './Input'
 import Select from 'react-select';
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
+// import 'react-toastify/dist/ReactToastify.css';
 import { Link, useHistory } from "react-router-dom";
 import authHeader from "../utils/authHeader";
 import axios from "axios";
 import BASE_URL from '../utils/baseUrl'
 
 const AddNewProduct = ({ showFormView }) => {
-    const productOption = [
-        { label: "ORANGES", value: "ORANGES" },
-        { label: "ORANGES", value: "ORANGES" },
-        { label: "ORANGES", value: "ORANGES" },
 
-    ]
 
 
     // const dispatch = useDispatch();
@@ -50,7 +46,7 @@ const AddNewProduct = ({ showFormView }) => {
                 setTimeout(() => { showFormView("false") }, 3000)
 
             }).catch((err) => {
-                toast.error(err?.response?.data?.message)
+                toast.error(err?.response?.data?.error)
             })
 
 
@@ -80,9 +76,9 @@ const AddNewProduct = ({ showFormView }) => {
                                     required
                                 />
                                 <Input
-                                    name="unitprice"
+                                    name="unit_price"
                                     inputHandler={inputHandler}
-                                    type="text"
+                                    type="number"
                                     labelName="Unit Price"
                                     placeholder="Unit Price"
                                     className="login-input"
@@ -91,9 +87,9 @@ const AddNewProduct = ({ showFormView }) => {
                             </div>
                             <div className="col-span-6 gap-6 sm:col-span-6 sm:row-span-1 flex input-container-flow">
                                 <Input
-                                    name="quantity"
+                                    name="quantity_in_stock"
                                     inputHandler={inputHandler}
-                                    type="text"
+                                    type="number"
                                     labelName="Quantity"
                                     placeholder="Quantity"
                                     className="login-input"
@@ -109,6 +105,7 @@ const AddNewProduct = ({ showFormView }) => {
                         </button>
                     </div>
                 </form>
+                <ToastContainer />
             </div>
 
         </>

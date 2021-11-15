@@ -3,11 +3,13 @@ import "../styles/register.css";
 import { useDispatch, useSelector } from "react-redux";
 import Input from './Input'
 import Select from 'react-select';
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import { Link, useHistory } from "react-router-dom";
 import axios from "axios";
 import { getInProducts } from '../Services/products'
-// import BASE_URL from '../utils/baseUrl'
+import BASE_URL from '../utils/baseUrl'
+import authHeader from '../utils/authHeader'
+import 'react-toastify/dist/ReactToastify.css'
 
 const AddSoldProduct = ({ showFormView }) => {
     // const productOption = [
@@ -51,15 +53,7 @@ const AddSoldProduct = ({ showFormView }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // dispatch(login(loginData))
-        //     .then(() => {
-        //         // history.push("/dashboard");
-        //         history.push("/users");
-        //     })
-        //     .catch((err) => {
-
-        //     });
-        axios.post(`${BASE_URL}/products`, loginData, { headers: authHeader() })
+        axios.post(`${BASE_URL}/stock-outs`, loginData, { headers: authHeader() })
             .then(function (response) {
                 toast.success("Successfully Sold Product")
                 setTimeout(() => { showFormView("false") }, 3000)
@@ -83,19 +77,16 @@ const AddSoldProduct = ({ showFormView }) => {
                     <div className="schoolmanager-container w-full max-w-xs mx-auto">
                         <div className="grid grid-cols-6 grid-rows-2  gap-8">
 
-
-                            <div className="col-span-6 gap-6 sm:col-span-6 sm:row-span-1 flex input-container-flow">
-                                <Input
-                                    name="name"
-                                    inputHandler={inputHandler}
-                                    type="text"
-                                    labelName="Product name"
-                                    placeholder="Product name"
-                                    className="login-input"
-                                    required
+                            <div className="col-span-6 gap-6 sm:col-span-6 sm:row-span-1">
+                                <Select
+                                    options={productOption}
+                                    onChange={(payload) => selectHandler({ ...payload, name: "product" })}
                                 />
+                            </div>
+                            <div className="col-span-6 gap-6 sm:col-span-6 sm:row-span-1 flex input-container-flow">
+
                                 <Input
-                                    name="unitprice"
+                                    name="price"
                                     inputHandler={inputHandler}
                                     type="text"
                                     labelName="Unit Price"
@@ -103,8 +94,6 @@ const AddSoldProduct = ({ showFormView }) => {
                                     className="login-input"
                                     required
                                 />
-                            </div>
-                            <div className="col-span-6 gap-6 sm:col-span-6 sm:row-span-1 flex input-container-flow">
                                 <Input
                                     name="quantity"
                                     inputHandler={inputHandler}
@@ -115,12 +104,8 @@ const AddSoldProduct = ({ showFormView }) => {
                                     required
                                 />
                             </div>
-                            <div className="col-span-6 gap-6 sm:col-span-6 sm:row-span-1">
-                                <Select
-                                    options={productOption}
-                                    onChange={(payload) => selectHandler({ ...payload, name: "product" })}
-                                />
-                            </div>
+
+
                         </div>
                     </div>
                     <div className="mt-8 text-center">
@@ -129,6 +114,7 @@ const AddSoldProduct = ({ showFormView }) => {
                         </button>
                     </div>
                 </form>
+                <ToastContainer />
             </div>
 
         </>
