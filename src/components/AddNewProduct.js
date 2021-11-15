@@ -13,9 +13,9 @@ import BASE_URL from '../utils/baseUrl'
 const AddNewProduct = ({ showFormView }) => {
 
 
-
     // const dispatch = useDispatch();
     // const history = useHistory();
+
     const initialUser = {
         quantity_in_stock: "",
         name: "",
